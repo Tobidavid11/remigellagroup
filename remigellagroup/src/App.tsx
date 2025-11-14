@@ -1,23 +1,18 @@
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
-import Navbar from './Components/Navbar';
-import Herosection from './Components/Herosection';
-import AboutSection from './Components/AboutSection';
-import CompaniesSection from './Components/CompaniesSection';
-import ServicesSection from './Components/ServiceSection';
-import ContactSection from './Components/ContactSection';
-import Footer from './Components/Footer';
+
+// Pages
+import HomePage from './Pages/HomePage';
+import AboutPage from './Pages/AboutPage';
+import ContactPage from './Pages/ContactPage';
 
 function App() {
   return (
-    <div className='app-container'>
-      <Navbar />
-      <Herosection />
-      <AboutSection />
-      <CompaniesSection />
-      <ServicesSection/>
-      <ContactSection/>
-      <Footer/>
-    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/contact" element={<ContactPage />} />
+    </Routes>
   );
 }
 

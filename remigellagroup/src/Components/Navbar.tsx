@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown} from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import '../Styles/Navbar.css';
-import SecondaryLogo from "../assets/Secondary-logo.png"
+import SecondaryLogo from '../assets/Secondary-logo.png';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,40 +18,61 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location]);
+
   const companies = [
-    { name: 'Remigella Interlink', sector: 'Trading' },
-    { name: 'Ohamadike Foundation', sector: 'Non-Profit' },
-    { name: 'Villa Franca Travels', sector: 'Tourism' },
-    { name: 'Bella Vita Properties', sector: 'Real Estate' },
-    { name: 'Valpantena Oil & Gas', sector: 'Energy' },
-    { name: 'Grand Afrique Foods', sector: 'Food Service' },
-    { name: 'Dansantoria Construction', sector: 'Construction' },
-    { name: 'View All Companies', sector: '' }
+    { name: 'Remigella Interlink', sector: 'Trading', link: '#companies' },
+    { name: 'Ohamadike Foundation', sector: 'Non-Profit', link: '#companies' },
+    { name: 'Villa Franca Travels', sector: 'Tourism', link: '#companies' },
+    { name: 'Bella Vita Properties', sector: 'Real Estate', link: '#companies' },
+    { name: 'Valpantena Oil & Gas', sector: 'Energy', link: '#companies' },
+    { name: 'Grand Afrique Foods', sector: 'Food Service', link: '#companies' },
+    { name: 'Dansantoria Construction', sector: 'Construction', link: '#companies' },
+    { name: 'View All Companies', sector: '', link: '#companies' }
   ];
 
   const services = [
-    'Construction',
-    'Oil & Gas',
-    'Real Estate',
-    'Transportation',
-    'Pharmaceuticals',
-    'Agriculture',
-    'Healthcare',
-    'Food Services'
+    { name: 'Construction', link: '#services' },
+    { name: 'Oil & Gas', link: '#services' },
+    { name: 'Real Estate', link: '#services' },
+    { name: 'Transportation', link: '#services' },
+    { name: 'Pharmaceuticals', link: '#services' },
+    { name: 'Agriculture', link: '#services' },
+    { name: 'Healthcare', link: '#services' },
+    { name: 'Food Services', link: '#services' }
   ];
 
-  return (
+  const scrollToSection = (sectionId: string) => {
+    // If we're not on the home page, navigate there first
+    if (location.pathname !== '/') {
+      window.location.href = `/${sectionId}`;
+    } else {
+      const element = document.querySelector(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
+return (
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
         <div className="navbar-brand">
-          <div className="logo-container">
-            <img src={SecondaryLogo} alt="Remigella Group Logo" className="logo" />
-          </div>
+          <Link to="/" className="logo-container">
+            <img src={SecondaryLogo || "/placeholder.svg"} alt="Remigella Group Logo" className="logo" />
+          </Link>
         </div>
 
         <div className={`navbar-menu ${isMobileMenuOpen ? 'active' : ''}`}>
-          <a href="#home" className="nav-link">Home</a>
-          <a href="#about" className="nav-link">About Us</a>
+          <Link to="/" className={`nav-link ${location.pathname === '/' ? 'isActive' : ''}`}>
+            Home
+          </Link>
+          <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'isActive' : ''}`}>
+            About Us
+          </Link>
           
           <div 
             className="nav-dropdown"
@@ -64,7 +87,11 @@ const Navbar = () => {
                 {companies.map((company, idx) => (
                   <a 
                     key={idx} 
-                    href="#companies" 
+                    href={company.link}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(company.link);
+                    }}
                     className="dropdown-item"
                   >
                     <span>{company.name}</span>
@@ -86,16 +113,26 @@ const Navbar = () => {
             {activeDropdown === 'services' && (
               <div className="dropdown-menu">
                 {services.map((service, idx) => (
-                  <a key={idx} href="#services" className="dropdown-item">
-                    {service}
+                  <a 
+                    key={idx} 
+                    href={service.link}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(service.link);
+                    }}
+                    className="dropdown-item"
+                  >
+                    {service.name}
                   </a>
                 ))}
               </div>
             )}
           </div>
 
-          <a href="#contact" className="nav-link">Contact</a>
-          <a href="#contact" className="nav-button">Get Started</a>
+          <Link to="/contact" className={`nav-link ${location.pathname === '/contact' ? 'isActive' : ''}`}>
+            Contact
+          </Link>
+          <Link to="/contact" className="nav-button">Get Started</Link>
         </div>
 
         <button 
@@ -109,5 +146,6 @@ const Navbar = () => {
     </nav>
   );
 };
+
 
 export default Navbar;

@@ -23,6 +23,7 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
+import { Link } from 'react-router-dom';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import '../Styles/CompainesSection.css';
 
@@ -290,10 +291,12 @@ const CompaniesSection = () => {
                   )}
                 </div>
                 
+               <Link to="/about">
                 <button className="company-link">
                   Learn More 
                   <ArrowRight size={18} />
                 </button>
+               </Link>
               </motion.div>
             );
           })}

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import '../Styles/Herosection.css';
 
@@ -191,12 +192,17 @@ const Herosection = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7, duration: 0.6 }}
               >
+             <Link to= "/about">
                 <button className="hero-btn primary">
                   {slides[currentSlide].cta}
                 </button>
+             </Link>
+
+<Link to="/contact" >
                 <button className="hero-btn secondary">
                   Get in touch
                 </button>
+</Link>
               </motion.div>
             </motion.div>
           </AnimatePresence>

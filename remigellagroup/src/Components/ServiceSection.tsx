@@ -273,10 +273,10 @@ const ServicesSection = () => {
                     </li>
                   ))}
                 </ul>
-                <button className="service-link">
+                {/* <button className="service-link">
                   Explore Service
                   <ArrowRight size={18} />
-                </button>
+                </button> */}
               </motion.div>
             );
           })}

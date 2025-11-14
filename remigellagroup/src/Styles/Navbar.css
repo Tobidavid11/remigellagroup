@@ -85,6 +85,15 @@
   color: #F3BA00;
 }
 
+.nav-link.isActive {
+  color: #F3BA00;
+  font-weight: 700;
+}
+
+.nav-link.isActive::after {
+  width: 100%;
+}
+
 .nav-dropdown {
   position: relative;
 }

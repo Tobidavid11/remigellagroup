@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { Award, Users, Globe, TrendingUp, Download, ArrowRight } from 'lucide-react';
+import { Award, Users, Globe, TrendingUp, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import '../Styles/AboutSection.css';
@@ -133,14 +134,17 @@ const AboutSection = () => {
             </div>
 
             <div className="about-cta">
+<Link to= "/about">
               <button className="btn-primary">
                 Learn More About Us
                 <ArrowRight size={20} />
               </button>
+</Link>
+             <Link to= "/contact">
               <button className="btn-outline">
-                <Download size={20} />
-                Download Profile
+                Get in Touch
               </button>
+             </Link>
             </div>
           </div>
         </div>
