@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import '../Styles/Navbar.css';
@@ -9,6 +9,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const location = useLocation();
+  const dropdownTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,29 +22,55 @@ const Navbar = () => {
   // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    setActiveDropdown(null);
   }, [location]);
 
   const companies = [
-    { name: 'Remigella Interlink', sector: 'Trading', link: '#companies' },
-    { name: 'Ohamadike Foundation', sector: 'Non-Profit', link: '#companies' },
-    { name: 'Villa Franca Travels', sector: 'Tourism', link: '#companies' },
-    { name: 'Bella Vita Properties', sector: 'Real Estate', link: '#companies' },
-    { name: 'Valpantena Oil & Gas', sector: 'Energy', link: '#companies' },
-    { name: 'Grand Afrique Foods', sector: 'Food Service', link: '#companies' },
-    { name: 'Dansantoria Construction', sector: 'Construction', link: '#companies' },
-    { name: 'View All Companies', sector: '', link: '#companies' }
+    { name: 'Remigella Interlink', sector: 'Trading', link: 'https://bitnox-technology.vercel.app', isExternal: true },
+    { name: 'Ohamadike Foundation', sector: 'Non-Profit', link: 'https://dexcraft.agency', isExternal: true },
   ];
 
   const services = [
-    { name: 'Construction', link: '#services' },
-    { name: 'Oil & Gas', link: '#services' },
-    { name: 'Real Estate', link: '#services' },
-    { name: 'Transportation', link: '#services' },
-    { name: 'Pharmaceuticals', link: '#services' },
-    { name: 'Agriculture', link: '#services' },
-    { name: 'Healthcare', link: '#services' },
-    { name: 'Food Services', link: '#services' }
+    { name: 'Construction', link: '#services', isExternal: false },
+    { name: 'Oil & Gas', link: '#services', isExternal: false },
+    { name: 'Real Estate', link: '#services', isExternal: false },
+    { name: 'Transportation', link: '#services', isExternal: false },
+    { name: 'Pharmaceuticals', link: '#services', isExternal: false },
+    { name: 'Agriculture', link: '#services', isExternal: false },
+    { name: 'Healthcare', link: '#services', isExternal: false },
+    { name: 'Food Services', link: '#services', isExternal: false }
   ];
+
+  const handleMouseEnter = (dropdown: string) => {
+    // Clear any existing timer
+    if (dropdownTimerRef.current) {
+      clearTimeout(dropdownTimerRef.current);
+      dropdownTimerRef.current = null;
+    }
+    setActiveDropdown(dropdown);
+  };
+
+  const handleMouseLeave = () => {
+    // Set a timer to close the dropdown after 300ms
+    dropdownTimerRef.current = window.setTimeout(() => {
+      setActiveDropdown(null);
+    }, 300);
+  };
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, link: string, isExternal: boolean) => {
+    e.preventDefault();
+    
+    // Close dropdown immediately
+    setActiveDropdown(null);
+    
+    if (isExternal) {
+      // Open external links in new tab
+      window.open(link, '_blank', 'noopener,noreferrer');
+    } else {
+      // Handle internal section navigation
+      scrollToSection(link);
+    }
+  };
 
   const scrollToSection = (sectionId: string) => {
     // If we're not on the home page, navigate there first
@@ -52,17 +79,24 @@ const Navbar = () => {
     } else {
       const element = document.querySelector(sectionId);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const offset = 80; // Account for fixed navbar height
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
       }
     }
   };
 
-return (
+  return (
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
         <div className="navbar-brand">
           <Link to="/" className="logo-container">
-            <img src={SecondaryLogo || "/placeholder.svg"} alt="Remigella Group Logo" className="logo" />
+            <img src={SecondaryLogo} alt="Remigella Group Logo" className="logo" />
           </Link>
         </div>
 
@@ -75,23 +109,24 @@ return (
           </Link>
           
           <div 
-            className="nav-dropdown"
-            onMouseEnter={() => setActiveDropdown('companies')}
-            onMouseLeave={() => setActiveDropdown(null)}
+            className="nav-dropdown" 
+            onMouseEnter={() => handleMouseEnter('companies')}
+            onMouseLeave={handleMouseLeave}
           >
             <button className="nav-link dropdown-trigger">
               Companies <ChevronDown size={16} />
             </button>
             {activeDropdown === 'companies' && (
-              <div className="dropdown-menu">
+              <div 
+                className="dropdown-menu"
+                onMouseEnter={() => handleMouseEnter('companies')}
+                onMouseLeave={handleMouseLeave}
+              >
                 {companies.map((company, idx) => (
                   <a 
                     key={idx} 
                     href={company.link}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection(company.link);
-                    }}
+                    onClick={(e) => handleLinkClick(e, company.link, company.isExternal)}
                     className="dropdown-item"
                   >
                     <span>{company.name}</span>
@@ -104,22 +139,23 @@ return (
 
           <div 
             className="nav-dropdown"
-            onMouseEnter={() => setActiveDropdown('services')}
-            onMouseLeave={() => setActiveDropdown(null)}
+            onMouseEnter={() => handleMouseEnter('services')}
+            onMouseLeave={handleMouseLeave}
           >
             <button className="nav-link dropdown-trigger">
               Services <ChevronDown size={16} />
             </button>
             {activeDropdown === 'services' && (
-              <div className="dropdown-menu">
+              <div 
+                className="dropdown-menu"
+                onMouseEnter={() => handleMouseEnter('services')}
+                onMouseLeave={handleMouseLeave}
+              >
                 {services.map((service, idx) => (
                   <a 
                     key={idx} 
                     href={service.link}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection(service.link);
-                    }}
+                    onClick={(e) => handleLinkClick(e, service.link, service.isExternal)}
                     className="dropdown-item"
                   >
                     {service.name}
@@ -146,6 +182,5 @@ return (
     </nav>
   );
 };
-
 
 export default Navbar;

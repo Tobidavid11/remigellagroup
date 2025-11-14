@@ -13,6 +13,7 @@ import {
 import { motion } from 'framer-motion';
 import SecondaryLogo from "../assets/Secondary-logo.png"
 import '../Styles/Footer.css';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -22,14 +23,9 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const companies = [
-    { name: 'Remigella Interlink', link: '#' },
-    { name: 'Ohamadike Foundation', link: '#' },
-    { name: 'Villa Franca Travels', link: '#' },
-    { name: 'Bella Vita Properties', link: '#' },
-    { name: 'Valpantena Oil & Gas', link: '#' },
-    { name: 'Grand Afrique Foods', link: '#' },
-    { name: 'Dansantoria Construction', link: '#' },
-    { name: 'Bella Strada Transport', link: '#' },
+    { name: 'Remigella Interlink', link: 'https://bitnox-technology.vercel.app' },
+    { name: 'Ohamadike Foundation', link: 'https://dexcraft.agency' },
+
   ];
 
   const quickLinks = [
@@ -92,10 +88,10 @@ const Footer = () => {
                     whileHover={{ x: 5 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <a href={company.link}>
+                    <Link to={company.link}>
                       <ExternalLink size={14} />
                       {company.name}
-                    </a>
+                    </Link>
                   </motion.li>
                 ))}
               </ul>

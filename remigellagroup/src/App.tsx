@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
+import ScrollToTop from './Components/ScrollToTop'; // Add this
 
 // Pages
 import HomePage from './Pages/HomePage';
@@ -8,11 +9,14 @@ import ContactPage from './Pages/ContactPage';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/about" element={<AboutPage />} />
-      <Route path="/contact" element={<ContactPage />} />
-    </Routes>
+    <>
+      <ScrollToTop /> {/* Add this */}
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+      </Routes>
+    </>
   );
 }
 
