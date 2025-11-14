@@ -26,8 +26,8 @@ const Navbar = () => {
   }, [location]);
 
   const companies = [
-    { name: 'Remigella Interlink', sector: 'Trading', link: 'https://bitnox-technology.vercel.app', isExternal: true },
-    { name: 'Ohamadike Foundation', sector: 'Non-Profit', link: 'https://dexcraft.agency', isExternal: true },
+    { name: 'Remigella Interlink', sector: 'Trading', link: 'https://www.ohamadikefcc.org', isExternal: true },
+    { name: 'Ohamadike Foundation', sector: 'Non-Profit', link: 'https://www.ohamadikefoundation.org', isExternal: true },
   ];
 
   const services = [

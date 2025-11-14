@@ -23,8 +23,8 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const companies = [
-    { name: 'Remigella Interlink', link: 'https://bitnox-technology.vercel.app' },
-    { name: 'Ohamadike Foundation', link: 'https://dexcraft.agency' },
+    { name: 'Remigella Interlink', link: 'https://www.ohamadikefcc.org' },
+    { name: 'Ohamadike Foundation', link: 'https://www.ohamadikefoundation.org' },
 
   ];
 
